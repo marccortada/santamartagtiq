@@ -7,7 +7,6 @@ import styles from '@/app/_styles/ops.module.css';
 type GiftCard = {
   id: string;
   label: string;
-  nfc_uid: string;
   initial_amount: number;
   current_balance: number;
   currency: string;
@@ -16,7 +15,7 @@ type GiftCard = {
 };
 
 export default function GiftCardLookupPage() {
-  const [uid, setUid] = useState('');
+  const [name, setName] = useState('');
   const [card, setCard] = useState<GiftCard | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,17 +27,29 @@ export default function GiftCardLookupPage() {
     setCard(null);
 
     try {
-      const { data, error: rpcError } = await supabase.rpc('get_gift_card_by_uid', {
-        p_nfc_uid: uid.trim(),
-      });
-
-      if (rpcError) {
-        setError(rpcError.message);
+      const term = name.trim();
+      if (!term) {
+        setError('Introduce un nombre para buscar la tarjeta.');
         return;
       }
 
-      const normalized = Array.isArray(data) ? data[0] : data;
-      setCard((normalized as GiftCard) ?? null);
+      const { data, error: queryError } = await supabase
+        .from('gift_cards')
+        .select('id, label, initial_amount, current_balance, currency, is_active, expires_at')
+        .ilike('label', `%${term}%`);
+
+      if (queryError) {
+        setError(queryError.message);
+        return;
+      }
+
+      const first = (data ?? [])[0] as GiftCard | undefined;
+      if (!first) {
+        setError('No se encontró ninguna tarjeta para ese nombre.');
+        return;
+      }
+
+      setCard(first);
     } finally {
       setLoading(false);
     }
@@ -47,23 +58,24 @@ export default function GiftCardLookupPage() {
   return (
     <section className={styles.page}>
       <header className={styles.header}>
-        <h1>Lookup de tarjeta por UID</h1>
-        <p>Consulta rápida del estado y saldo de una tarjeta NFC.</p>
+        <h1>Buscar tarjeta regalo por nombre</h1>
+        <p>Consulta rápida del estado y saldo de una tarjeta regalo usando el nombre de la persona.</p>
       </header>
 
       <article className={`${styles.card} ${styles.cardBlue}`}>
         <h2 className={styles.cardTitle}>Buscar tarjeta</h2>
-        <p className={styles.cardText}>Introduce un UID leído desde el lector NFC.</p>
+        <p className={styles.cardText}>Escribe el nombre de la persona tal y como se registró en la tarjeta.</p>
 
         <form onSubmit={onLookup} className={`${styles.row} ${styles.mt12}`}>
           <input
             className={styles.grow}
-            placeholder="UID NFC"
-            value={uid}
-            onChange={(e) => setUid(e.target.value)}
+            placeholder="Nombre de la persona (MAYÚSCULAS)"
+            value={name}
+            onChange={(e) => setName(e.target.value.toUpperCase())}
+            style={{ textTransform: 'uppercase' }}
             required
           />
-          <button type="submit" disabled={loading || uid.trim().length === 0}>
+          <button type="submit" disabled={loading || name.trim().length === 0}>
             {loading ? 'Buscando...' : 'Buscar'}
           </button>
         </form>
@@ -77,12 +89,8 @@ export default function GiftCardLookupPage() {
           <h2 className={styles.cardTitle}>Resultado</h2>
           <div className={`${styles.metaGrid} ${styles.mt12}`}>
             <div className={styles.metaItem}>
-              <p className={styles.metaLabel}>Label</p>
+              <p className={styles.metaLabel}>Nombre</p>
               <p className={styles.metaValue}>{card.label}</p>
-            </div>
-            <div className={styles.metaItem}>
-              <p className={styles.metaLabel}>UID</p>
-              <p className={styles.metaValue}>{card.nfc_uid}</p>
             </div>
             <div className={styles.metaItem}>
               <p className={styles.metaLabel}>Saldo</p>

@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { supabase } from '@/lib/supabaseClient';
 
 type NavItem = {
   href?: string;
@@ -22,7 +21,6 @@ const navItems: NavItem[] = [
     icon: 'I',
     isActive: (pathname) => pathname.startsWith('/dashboard/informes'),
   },
-  { href: '/fichar', label: 'Fichar', icon: 'F', isActive: (pathname) => pathname.startsWith('/fichar') },
   {
     href: '/dashboard/fichajes',
     label: 'Fichajes',
@@ -74,6 +72,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   async function handleLogout() {
     await fetch('/api/auth/code-logout', { method: 'POST' });
+    const { supabase } = await import('@/lib/supabaseClient');
     await supabase.auth.signOut();
     router.push('/login');
     router.refresh();
@@ -107,7 +106,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         <div className="app-main">
           <header className="app-mobile-header">
-            <Image src="/logo-santa-marta-dark.svg" alt="Santa Marta" width={132} height={32} className="app-mobile-logo-image" priority />
+            <Image src="/logo-santa-marta-dark.svg" alt="Santa Marta" width={132} height={32} className="app-mobile-logo-image" />
             <Link href="/dashboard" className="app-mobile-btn">
               Dashboard
             </Link>

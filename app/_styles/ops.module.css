@@ -138,6 +138,44 @@
   margin-top: 12px;
 }
 
+.accordion {
+  margin-top: 12px;
+  border-radius: 14px;
+  border: 1px solid #e0e8f4;
+  background: #f8fbff;
+  overflow: hidden;
+}
+
+.accordionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #eef3ff;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.accordionChevron {
+  font-size: 0.9rem;
+}
+
+.accordionBody {
+  padding: 10px 12px 12px;
+  border-top: 1px solid #e0e8f4;
+  display: grid;
+  gap: 8px;
+}
+
+.accordionLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: rgba(15, 23, 42, 0.82);
+}
+
 @media (max-width: 860px) {
   .gridCols2 {
     grid-template-columns: 1fr;

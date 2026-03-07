@@ -8,7 +8,6 @@ import styles from '@/app/_styles/ops.module.css';
 type GiftCard = {
   id: string;
   label: string;
-  nfc_uid: string;
   initial_amount: number;
   current_balance: number;
   currency: string;
@@ -55,7 +54,7 @@ export default function GiftCardDetailPage() {
     try {
       const cardQuery = supabase
         .from('gift_cards')
-        .select('id, label, nfc_uid, initial_amount, current_balance, currency, is_active, expires_at')
+        .select('id, label, initial_amount, current_balance, currency, is_active, expires_at')
         .eq('id', id)
         .single();
 
@@ -103,8 +102,8 @@ export default function GiftCardDetailPage() {
       return;
     }
 
-    const { data, error: rpcError } = await supabase.rpc('redeem_gift_card_by_uid', {
-      p_nfc_uid: card.nfc_uid,
+    const { data, error: rpcError } = await supabase.rpc('redeem_gift_card_by_id', {
+      p_gift_card_id: card.id,
       p_amount: parsedAmount,
       p_description: description.trim() || null,
     });
@@ -148,12 +147,8 @@ export default function GiftCardDetailPage() {
         <h2 className={styles.cardTitle}>Ficha de tarjeta</h2>
         <div className={`${styles.metaGrid} ${styles.mt12}`}>
           <div className={styles.metaItem}>
-            <p className={styles.metaLabel}>Label</p>
+            <p className={styles.metaLabel}>Nombre</p>
             <p className={styles.metaValue}>{card.label}</p>
-          </div>
-          <div className={styles.metaItem}>
-            <p className={styles.metaLabel}>UID</p>
-            <p className={styles.metaValue}>{card.nfc_uid}</p>
           </div>
           <div className={styles.metaItem}>
             <p className={styles.metaLabel}>Inicial</p>
@@ -180,8 +175,8 @@ export default function GiftCardDetailPage() {
 
       <div className={styles.gridCols2}>
         <article className={`${styles.card} ${styles.cardYellow}`}>
-          <h2 className={styles.cardTitle}>Registrar consumo (RPC)</h2>
-          <p className={styles.cardText}>Descuenta saldo desde el UID físico de la tarjeta.</p>
+          <h2 className={styles.cardTitle}>Registrar consumo</h2>
+          <p className={styles.cardText}>Descuenta saldo desde esta tarjeta regalo.</p>
 
           <form onSubmit={onRedeem} className={styles.formGrid}>
             <input

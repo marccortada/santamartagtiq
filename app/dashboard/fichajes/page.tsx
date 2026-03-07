@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
@@ -68,7 +68,7 @@ export default function FichajesPage() {
   const [trabajadorId, setTrabajadorId] = useState<string>('');
   const [fromDate, setFromDate] = useState<string>(week.from);
   const [toDate, setToDate] = useState<string>(week.to);
-  const [uidInput, setUidInput] = useState<string>('');
+  const [manualTrabajadorId, setManualTrabajadorId] = useState<string>('');
   const [dispositivoInput, setDispositivoInput] = useState<string>('lector-caja-1');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -136,13 +136,18 @@ export default function FichajesPage() {
     void loadFichajes();
   }, [loadFichajes]);
 
-  const onFicharPorUid = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onFicharManual = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setInfo(null);
 
-    const { data, error: rpcError } = await supabase.rpc('fichar_por_uid', {
-      p_uid_fisico: uidInput.trim(),
+    if (!manualTrabajadorId) {
+      setError('Selecciona un trabajador para fichar.');
+      return;
+    }
+
+    const { data, error: rpcError } = await supabase.rpc('fichar_por_trabajador_id', {
+      p_trabajador_id: manualTrabajadorId,
       p_dispositivo_id: dispositivoInput.trim() || null,
     });
 
@@ -158,7 +163,6 @@ export default function FichajesPage() {
     }
 
     setInfo(`Fichaje OK: ${result.tipo ?? '-'} · ${new Date(result.fichado_en ?? '').toLocaleString('es-ES')}`);
-    setUidInput('');
     await loadFichajes();
   };
 
@@ -171,23 +175,29 @@ export default function FichajesPage() {
 
       <div className={styles.gridCols2}>
         <article className={`${styles.card} ${styles.cardYellow}`}>
-          <h2 className={styles.cardTitle}>Fichar por UID (RPC)</h2>
-          <p className={styles.cardText}>Registra entrada/salida en el dispositivo seleccionado.</p>
+          <h2 className={styles.cardTitle}>Fichar manualmente</h2>
+          <p className={styles.cardText}>Por si el lector NFC falla: selecciona un trabajador y registra su fichaje.</p>
 
-          <form onSubmit={onFicharPorUid} className={styles.formGrid}>
-            <input
-              placeholder="UID tarjeta empleado"
-              value={uidInput}
-              onChange={(e) => setUidInput(e.target.value)}
+          <form onSubmit={onFicharManual} className={styles.formGrid}>
+            <select
+              value={manualTrabajadorId}
+              onChange={(e) => setManualTrabajadorId(e.target.value)}
               required
-            />
+            >
+              <option value="">Selecciona trabajador...</option>
+              {trabajadores.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.nombre_completo} (#{t.numero_logico})
+                </option>
+              ))}
+            </select>
             <input
               placeholder="Dispositivo (opcional)"
               value={dispositivoInput}
               onChange={(e) => setDispositivoInput(e.target.value)}
             />
-            <button type="submit" disabled={loading || uidInput.trim().length === 0}>
-              {loading ? 'Registrando...' : 'Registrar fichaje'}
+            <button type="submit" disabled={loading || !manualTrabajadorId}>
+              {loading ? 'Registrando...' : 'Fichar ahora'}
             </button>
           </form>
         </article>

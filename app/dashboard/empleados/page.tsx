@@ -107,6 +107,8 @@ export default function EmpleadosPage() {
   const [scannerMode, setScannerMode] = useState(false);
   const [scannerInput, setScannerInput] = useState('');
   const [pendingScannedUid, setPendingScannedUid] = useState<string | null>(null);
+  const [scannerUiUid, setScannerUiUid] = useState<string | null>(null);
+  const [scannerUiCardLabel, setScannerUiCardLabel] = useState<string | null>(null);
   const scannerRef = useRef<HTMLInputElement>(null);
 
   const [loadingWorkers, setLoadingWorkers] = useState<boolean>(false);
@@ -453,7 +455,7 @@ export default function EmpleadosPage() {
 
       const { data: existing, error } = await supabase
         .from('tarjetas')
-        .select('id, trabajador_id, uid_fisico')
+        .select('id, trabajador_id, uid_fisico, numero_logico')
         .eq('uid_fisico', uid)
         .maybeSingle();
 
@@ -464,12 +466,26 @@ export default function EmpleadosPage() {
 
       if (existing?.id) {
         const ownerName = workers.find((worker) => worker.id === existing.trabajador_id)?.nombre_completo;
+        const logicalLabel =
+          typeof existing.numero_logico === 'number' ? `Tarjeta #${existing.numero_logico}` : null;
+
+        setScannerUiCardLabel(logicalLabel);
         if (existing.trabajador_id === selectedWorkerId) {
-          setInfoMsg(`UID ${uid} ya está asignado a este empleado.`);
+          setInfoMsg(
+            logicalLabel
+              ? `UID ${uid} (${logicalLabel}) ya está asignado a este empleado.`
+              : `UID ${uid} ya está asignado a este empleado.`,
+          );
         } else if (ownerName) {
-          setInfoMsg(`UID ${uid} ya está asignado a ${ownerName}.`);
+          setInfoMsg(
+            logicalLabel
+              ? `UID ${uid} (${logicalLabel}) ya está asignado a ${ownerName}.`
+              : `UID ${uid} ya está asignado a ${ownerName}.`,
+          );
         } else {
-          setInfoMsg(`UID ${uid} ya existe en el sistema.`);
+          setInfoMsg(
+            logicalLabel ? `UID ${uid} (${logicalLabel}) ya existe en el sistema.` : `UID ${uid} ya existe en el sistema.`,
+          );
         }
         setPendingScannedUid(null);
         return;
@@ -493,6 +509,8 @@ export default function EmpleadosPage() {
     if (!scannerMode) return;
     const uid = scannerInput.trim();
     if (!uid) return;
+    setScannerUiUid(normalizeUid(uid));
+    setScannerUiCardLabel(null);
     await processScannedUid(uid);
     setScannerInput('');
     scannerRef.current?.focus();
@@ -530,11 +548,12 @@ export default function EmpleadosPage() {
   }, [scannerMode]);
 
   return (
-    <section className={styles.page}>
-      <header className={styles.header}>
-        <h1>Empleados</h1>
-        <p>Alta y edición completa de empleados con configuración de tarjetas NFC desde la app.</p>
-      </header>
+    <>
+      <section className={styles.page}>
+        <header className={styles.header}>
+          <h1>Empleados</h1>
+          <p>Alta y edición completa de empleados con configuración de tarjetas NFC desde la app.</p>
+        </header>
 
       {errorMsg && <p className="status-error">{errorMsg}</p>}
       {infoMsg && <p className="status-ok">{infoMsg}</p>}
@@ -692,6 +711,8 @@ export default function EmpleadosPage() {
                   setScannerMode((prev) => !prev);
                   setPendingScannedUid(null);
                   setScannerInput('');
+                  setScannerUiUid(null);
+                  setScannerUiCardLabel(null);
                 }}
               >
                 {scannerMode ? 'Detener lectura' : 'Leer tarjeta nueva'}
@@ -699,24 +720,10 @@ export default function EmpleadosPage() {
               {scannerMode && <span className={styles.scanStatus}>Modo lectura activo</span>}
             </div>
 
-            {scannerMode && (
-              <form className={styles.formGrid} onSubmit={handleScannerSubmit}>
-                <input
-                  ref={scannerRef}
-                  placeholder="Pasa la tarjeta NFC (lector + Enter)"
-                  value={scannerInput}
-                  onChange={(e) => setScannerInput(e.target.value)}
-                  onBlur={() => scannerRef.current?.focus()}
-                  autoComplete="off"
-                />
-                <button type="submit" disabled={scannerInput.trim().length === 0}>
-                  Detectar UID
-                </button>
-              </form>
-            )}
-
             {pendingScannedUid && (
-              <p className={styles.helper}>UID pendiente detectado: <strong>{pendingScannedUid}</strong></p>
+              <p className={styles.helper}>
+                UID pendiente detectado: <strong>{pendingScannedUid}</strong>
+              </p>
             )}
 
             <div className={styles.formGrid}>
@@ -828,6 +835,74 @@ export default function EmpleadosPage() {
           </article>
         </section>
       </div>
-    </section>
+      </section>
+      {scannerMode && (
+        <div className={styles.scannerOverlay} role="dialog" aria-modal="true" aria-label="Lectura de tarjeta NFC">
+          <div className={styles.scannerModal}>
+            <button
+              type="button"
+              className={styles.scannerClose}
+              onClick={() => {
+                setScannerMode(false);
+                setScannerInput('');
+                setPendingScannedUid(null);
+                setScannerUiUid(null);
+                setScannerUiCardLabel(null);
+              }}
+            >
+              Cerrar
+            </button>
+
+            <h2 className={styles.scannerTitle}>Leyendo tarjeta NFC</h2>
+            <p className={styles.scannerSubtitle}>Acerca la tarjeta al lector USB. Se detectará automáticamente.</p>
+
+            <div className={styles.scannerPulseWrap}>
+              <div className={styles.scannerPulseCircle} />
+              <div className={styles.scannerPulseCircle} />
+              <div className={styles.scannerPulseCore} />
+            </div>
+
+            {scannerUiUid ? (
+              <div className={styles.scannerDetected}>
+                <p className={styles.scannerUid}>
+                  UID detectado: <strong>{scannerUiUid}</strong>
+                </p>
+                {scannerUiCardLabel && (
+                  <p className={styles.scannerMeta}>
+                    Tipo:&nbsp;
+                    <strong>{scannerUiCardLabel}</strong>
+                  </p>
+                )}
+                {pendingScannedUid && (
+                  <p className={styles.scannerMeta}>
+                    Listo para asignar a este empleado. También verás el UID en el campo inferior.
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className={styles.scannerHint}>Esperando lectura... No cierres esta ventana hasta terminar.</p>
+            )}
+
+            <form className={styles.scannerForm} onSubmit={handleScannerSubmit}>
+              <label className={styles.scannerLabel}>
+                Canal de lectura
+                <input
+                  ref={scannerRef}
+                  placeholder="El lector escribirá aquí el UID y pulsará Enter"
+                  value={scannerInput}
+                  onChange={(e) => setScannerInput(e.target.value)}
+                  onBlur={() => scannerRef.current?.focus()}
+                  autoComplete="off"
+                  className={styles.scannerInput}
+                />
+              </label>
+              <button type="submit" disabled={scannerInput.trim().length === 0}>
+                Detectar UID manualmente
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

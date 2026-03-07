@@ -1,21 +1,11 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/auth/code-login/route": "app/api/auth/code-login/route.js",
-  "/api/owner/reports/pdf/route": "app/api/owner/reports/pdf/route.js",
-  "/api/auth/code-logout/route": "app/api/auth/code-logout/route.js",
+  "/fichar/page": "app/fichar/page.js",
   "/api/owner/reports/route": "app/api/owner/reports/route.js",
   "/api/owner/timeline/route": "app/api/owner/timeline/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/fichar/page": "app/fichar/page.js",
-  "/page": "app/page.js",
-  "/test/page": "app/test/page.js",
-  "/unauthorized/page": "app/unauthorized/page.js",
-  "/login/page": "app/login/page.js",
-  "/dashboard/empleados/page": "app/dashboard/empleados/page.js",
-  "/dashboard/gift-cards/[id]/page": "app/dashboard/gift-cards/[id]/page.js",
-  "/dashboard/fichajes/page": "app/dashboard/fichajes/page.js",
-  "/dashboard/gift-cards/page": "app/dashboard/gift-cards/page.js",
-  "/dashboard/gift-cards/lookup/page": "app/dashboard/gift-cards/lookup/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
   "/dashboard/informes/page": "app/dashboard/informes/page.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/dashboard/fichajes/page": "app/dashboard/fichajes/page.js",
+  "/dashboard/gift-cards/lookup/page": "app/dashboard/gift-cards/lookup/page.js",
+  "/dashboard/gift-cards/page": "app/dashboard/gift-cards/page.js",
+  "/dashboard/empleados/page": "app/dashboard/empleados/page.js"
 }

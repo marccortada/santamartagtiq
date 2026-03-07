@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import styles from '@/app/_styles/ops.module.css';
 
 type Trabajador = {
   id: string;
@@ -11,6 +12,7 @@ type Trabajador = {
 export default function TestPage() {
   const [rows, setRows] = useState<Trabajador[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function load() {
@@ -24,23 +26,50 @@ export default function TestPage() {
       } else if (data) {
         setRows(data as Trabajador[]);
       }
+      setLoading(false);
     }
 
-    load();
+    void load();
   }, []);
 
-  if (errorMsg) {
-    return <p>Error: {errorMsg}</p>;
-  }
-
   return (
-    <div>
-      <h1>Trabajadores</h1>
-      <ul>
-        {rows.map((t) => (
-          <li key={t.id}>{t.nombre_completo}</li>
-        ))}
-      </ul>
-    </div>
+    <section className={styles.page}>
+      <header className={styles.header}>
+        <h1>Test de conexión</h1>
+        <p>Lectura básica de trabajadores desde Supabase para validar conectividad.</p>
+      </header>
+
+      {loading && <p className={styles.muted}>Cargando...</p>}
+      {errorMsg && <p className="status-error">Error: {errorMsg}</p>}
+
+      {!loading && !errorMsg && (
+        <article className={styles.card}>
+          <h2 className={styles.cardTitle}>Trabajadores</h2>
+          <div className={`${styles.tableWrap} ${styles.mt12}`}>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((worker) => (
+                  <tr key={worker.id}>
+                    <td>{worker.id}</td>
+                    <td>{worker.nombre_completo}</td>
+                  </tr>
+                ))}
+                {rows.length === 0 && (
+                  <tr>
+                    <td colSpan={2}>Sin trabajadores disponibles.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </article>
+      )}
+    </section>
   );
 }

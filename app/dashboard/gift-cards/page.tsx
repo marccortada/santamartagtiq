@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
-import { supabase } from '../../../lib/supabaseClient';
+import { supabase } from '@/lib/supabaseClient';
+import styles from '@/app/_styles/ops.module.css';
 
 type GiftCard = {
   id: string;
@@ -31,19 +32,21 @@ export default function GiftCardsPage() {
     setLoading(true);
     setError(null);
 
-    const { data, error: queryError } = await supabase
-      .from('gift_cards')
-      .select('id, label, nfc_uid, initial_amount, current_balance, currency, is_active, expires_at, created_at')
-      .order('created_at', { ascending: false });
+    try {
+      const { data, error: queryError } = await supabase
+        .from('gift_cards')
+        .select('id, label, nfc_uid, initial_amount, current_balance, currency, is_active, expires_at, created_at')
+        .order('created_at', { ascending: false });
 
-    if (queryError) {
-      setError(queryError.message);
+      if (queryError) {
+        setError(queryError.message);
+        return;
+      }
+
+      setCards((data ?? []) as GiftCard[]);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    setCards((data ?? []) as GiftCard[]);
-    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -83,67 +86,78 @@ export default function GiftCardsPage() {
   };
 
   return (
-    <section>
-      <h2>Gift Cards</h2>
+    <section className={styles.page}>
+      <header className={styles.header}>
+        <h1>Tarjetas regalo</h1>
+        <p>Gestión de tarjetas NFC: alta, saldo actual y acceso al detalle de movimientos.</p>
+      </header>
 
-      <form onSubmit={onCreateCard} style={{ display: 'grid', gap: 8, marginBottom: 16, maxWidth: 520 }}>
-        <h3>Nueva tarjeta regalo</h3>
-        <input placeholder="Label" value={label} onChange={(e) => setLabel(e.target.value)} required />
-        <input placeholder="NFC UID" value={nfcUid} onChange={(e) => setNfcUid(e.target.value)} required />
-        <input
-          type="number"
-          step="0.01"
-          min="0.01"
-          placeholder="Importe inicial"
-          value={initialAmount}
-          onChange={(e) => setInitialAmount(e.target.value)}
-          required
-        />
-        <input type="datetime-local" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />
-        <button type="submit">Crear tarjeta</button>
-      </form>
+      <article className={`${styles.card} ${styles.cardPink}`}>
+        <h2 className={styles.cardTitle}>Nueva tarjeta regalo</h2>
+        <p className={styles.cardText}>Crea una tarjeta vinculando etiqueta, UID e importe inicial.</p>
 
-      {loading && <p>Cargando tarjetas...</p>}
-      {error && <p style={{ color: 'crimson' }}>{error}</p>}
-      {info && <p style={{ color: 'green' }}>{info}</p>}
+        <form onSubmit={onCreateCard} className={styles.formGrid}>
+          <input placeholder="Label" value={label} onChange={(e) => setLabel(e.target.value)} required />
+          <input placeholder="NFC UID" value={nfcUid} onChange={(e) => setNfcUid(e.target.value)} required />
+          <input
+            type="number"
+            step="0.01"
+            min="0.01"
+            placeholder="Importe inicial"
+            value={initialAmount}
+            onChange={(e) => setInitialAmount(e.target.value)}
+            required
+          />
+          <input type="datetime-local" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />
+          <button type="submit">Crear tarjeta</button>
+        </form>
+      </article>
 
-      <table cellPadding={8} style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th align="left">Label</th>
-            <th align="left">UID</th>
-            <th align="left">Inicial</th>
-            <th align="left">Saldo</th>
-            <th align="left">Activa</th>
-            <th align="left">Caduca</th>
-            <th align="left">Detalle</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cards.map((c) => (
-            <tr key={c.id}>
-              <td>{c.label}</td>
-              <td>{c.nfc_uid}</td>
-              <td>
-                {c.initial_amount} {c.currency}
-              </td>
-              <td>
-                {c.current_balance} {c.currency}
-              </td>
-              <td>{c.is_active ? 'Sí' : 'No'}</td>
-              <td>{c.expires_at ? new Date(c.expires_at).toLocaleString('es-ES') : '-'}</td>
-              <td>
-                <Link href={`/dashboard/gift-cards/${c.id}`}>Abrir</Link>
-              </td>
-            </tr>
-          ))}
-          {!loading && cards.length === 0 && (
+      {loading && <p className={styles.muted}>Cargando tarjetas...</p>}
+      {error && <p className="status-error">{error}</p>}
+      {info && <p className="status-ok">{info}</p>}
+
+      <div className={styles.tableWrap}>
+        <table>
+          <thead>
             <tr>
-              <td colSpan={7}>No hay tarjetas regalo todavía.</td>
+              <th>Label</th>
+              <th>UID</th>
+              <th>Inicial</th>
+              <th>Saldo</th>
+              <th>Activa</th>
+              <th>Caduca</th>
+              <th>Detalle</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {cards.map((card) => (
+              <tr key={card.id}>
+                <td>{card.label}</td>
+                <td>{card.nfc_uid}</td>
+                <td>
+                  {card.initial_amount} {card.currency}
+                </td>
+                <td>
+                  {card.current_balance} {card.currency}
+                </td>
+                <td>{card.is_active ? 'Sí' : 'No'}</td>
+                <td>{card.expires_at ? new Date(card.expires_at).toLocaleString('es-ES') : '-'}</td>
+                <td>
+                  <Link className={styles.link} href={`/dashboard/gift-cards/${card.id}`}>
+                    Abrir
+                  </Link>
+                </td>
+              </tr>
+            ))}
+            {!loading && cards.length === 0 && (
+              <tr>
+                <td colSpan={7}>No hay tarjetas regalo todavía.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

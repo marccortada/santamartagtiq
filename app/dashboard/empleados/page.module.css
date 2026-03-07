@@ -1,0 +1,316 @@
+.page {
+  display: grid;
+  gap: 16px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--ink);
+}
+
+.header p {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+}
+
+.layout {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 330px 1fr;
+}
+
+.detailColumn {
+  display: grid;
+  gap: 14px;
+}
+
+.card {
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  padding: 16px;
+  background: var(--panel);
+}
+
+.listCard {
+  background: var(--panel);
+}
+
+.detailCard {
+  background: var(--panel);
+}
+
+.chartCard {
+  background: var(--panel);
+}
+
+.card h2 {
+  color: var(--ink);
+}
+
+.helper {
+  margin: 8px 0 0;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+.formGrid {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.separator {
+  margin: 16px 0;
+  border: none;
+  border-top: 1px solid #e0e8f4;
+}
+
+.search {
+  margin-top: 12px;
+}
+
+.workerList {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+  max-height: 520px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.workerBtn {
+  border: 1px solid #dbe4f1;
+  border-radius: 12px;
+  background: #fbfdff;
+  color: #111;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  text-align: left;
+}
+
+.workerBtnActive {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.14);
+}
+
+.workerName {
+  font-weight: 700;
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.badgeOk {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badgeMuted {
+  background: #dcdcdc;
+  color: #3b3b3b;
+}
+
+.detailHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.detailHead h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.controls {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.segmented {
+  display: inline-flex;
+  border-radius: 999px;
+  border: 1px solid #ccd8ee;
+  background: #f5f8fe;
+  padding: 2px;
+}
+
+.segmentBtn {
+  min-width: 74px;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: transparent;
+  color: rgba(20, 20, 20, 0.8);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.segmentActive {
+  background: var(--blue-strong);
+  color: #f8fbff;
+}
+
+.dateField {
+  display: grid;
+  gap: 4px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(20, 20, 20, 0.82);
+}
+
+.kpiGrid {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.kpiGrid article {
+  border-radius: 12px;
+  border: 1px solid #e0e8f4;
+  background: #f8fbff;
+  padding: 10px;
+}
+
+.kpiLabel {
+  margin: 0;
+  color: rgba(20, 20, 20, 0.62);
+  font-size: 0.82rem;
+}
+
+.kpiValue {
+  margin: 4px 0 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.kpiValueSmall {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.barList {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.barItem {
+  border-radius: 12px;
+  border: 1px solid #e0e8f4;
+  background: #fbfdff;
+  padding: 8px;
+}
+
+.barMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.barTrack {
+  margin-top: 6px;
+  height: 10px;
+  border-radius: 999px;
+  background: #e4eaf6;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+}
+
+.tableWrap {
+  margin-top: 10px;
+  overflow: auto;
+  border-radius: 14px;
+}
+
+.cardList {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.cardItem {
+  border: 1px solid #dde6f3;
+  border-radius: 12px;
+  background: #fbfdff;
+  padding: 10px;
+}
+
+.cardItemHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cardItemActions {
+  margin-top: 8px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr auto auto;
+}
+
+.scanRow {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.scanActiveBtn {
+  background: #14532d;
+  color: #f0fdf4;
+}
+
+.scanStatus {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #166534;
+}
+
+@media (max-width: 1180px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .workerList {
+    max-height: 280px;
+  }
+}
+
+@media (max-width: 860px) {
+  .kpiGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .kpiGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cardItemActions {
+    grid-template-columns: 1fr;
+  }
+}

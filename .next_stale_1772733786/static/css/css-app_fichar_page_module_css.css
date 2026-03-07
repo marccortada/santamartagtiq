@@ -1,0 +1,99 @@
+/*!**********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[3]!./app/fichar/page.module.css ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************/
+.page_page__fZ4fP {
+  display: grid;
+  grid-gap: 16px;
+  gap: 16px;
+}
+
+.page_gridCols2__MhvD9 {
+  display: grid;
+  grid-gap: 12px;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.page_card__2YMaw {
+  border-radius: 22px;
+  border: 1px solid rgba(20, 20, 20, 0.12);
+  padding: 16px;
+}
+
+.page_yellow__KoLfh {
+  background: linear-gradient(145deg, #f4e37a 0%, #ead46b 100%);
+}
+
+.page_blue__cVaOc {
+  background: linear-gradient(145deg, #cbdbf9 0%, #b8caeb 100%);
+}
+
+.page_pink__mw7ya {
+  background: linear-gradient(145deg, #f1c4dc 0%, #e7b4d0 100%);
+}
+
+.page_title__r12Ot {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.page_text__qCuJI {
+  margin: 8px 0 0;
+  color: rgba(20, 20, 20, 0.72);
+}
+
+.page_form__HOWBe {
+  margin-top: 12px;
+  display: grid;
+  grid-gap: 8px;
+  gap: 8px;
+}
+
+.page_label__z5b25 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.page_statusRow__x7VUq {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page_dot__Vq9V_ {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+}
+
+.page_dotIdle__irydO {
+  background: #1ea85f;
+  box-shadow: 0 0 0 4px rgba(30, 168, 95, 0.2);
+}
+
+.page_dotLoading__T49wi {
+  background: #1b1b1b;
+  box-shadow: 0 0 0 4px rgba(27, 27, 27, 0.2);
+}
+
+.page_pre__iC6x9 {
+  margin-top: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(17, 17, 17, 0.18);
+  background: rgba(255, 255, 255, 0.62);
+  padding: 12px;
+  min-height: 120px;
+  overflow-x: auto;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+@media (max-width: 860px) {
+  .page_gridCols2__MhvD9 {
+    grid-template-columns: 1fr;
+  }
+}
+

@@ -1,0 +1,145 @@
+.page {
+  display: grid;
+  gap: 16px;
+}
+
+.header {
+  display: grid;
+  gap: 6px;
+}
+
+.header h1,
+.header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.header p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.card {
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  padding: 16px;
+  background: var(--panel);
+}
+
+.cardYellow {
+  background: var(--panel);
+}
+
+.cardPink {
+  background: var(--panel);
+}
+
+.cardBlue {
+  background: var(--panel);
+}
+
+.cardGreen {
+  background: var(--panel);
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.cardText {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+}
+
+.gridCols2 {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.formGrid {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.grow {
+  flex: 1 1 220px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tableWrap {
+  overflow: auto;
+  border-radius: 14px;
+}
+
+.muted {
+  color: rgba(20, 20, 20, 0.65);
+}
+
+.metaGrid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.metaItem {
+  border-radius: 12px;
+  background: #f8fbff;
+  border: 1px solid #e0e8f4;
+  padding: 10px;
+}
+
+.metaLabel {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(20, 20, 20, 0.58);
+}
+
+.metaValue {
+  margin: 4px 0 0;
+  font-weight: 700;
+}
+
+.link {
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.pre {
+  border-radius: 12px;
+  border: 1px solid #e0e8f4;
+  background: #fbfdff;
+  padding: 10px;
+  overflow: auto;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.mt12 {
+  margin-top: 12px;
+}
+
+@media (max-width: 860px) {
+  .gridCols2 {
+    grid-template-columns: 1fr;
+  }
+}

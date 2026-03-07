@@ -1,0 +1,93 @@
+.page {
+  display: grid;
+  gap: 16px;
+}
+
+.gridCols2 {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card {
+  border-radius: 22px;
+  border: 1px solid rgba(20, 20, 20, 0.12);
+  padding: 16px;
+}
+
+.yellow {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.blue {
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.pink {
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--electric-blue);
+}
+
+.text {
+  margin: 8px 0 0;
+  color: rgba(20, 20, 20, 0.72);
+}
+
+.form {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.statusRow {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+}
+
+.dotIdle {
+  background: #1ea85f;
+  box-shadow: 0 0 0 4px rgba(30, 168, 95, 0.2);
+}
+
+.dotLoading {
+  background: #1b1b1b;
+  box-shadow: 0 0 0 4px rgba(27, 27, 27, 0.2);
+}
+
+.pre {
+  margin-top: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(17, 17, 17, 0.18);
+  background: rgba(255, 255, 255, 0.62);
+  padding: 12px;
+  min-height: 120px;
+  overflow-x: auto;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+@media (max-width: 860px) {
+  .gridCols2 {
+    grid-template-columns: 1fr;
+  }
+}

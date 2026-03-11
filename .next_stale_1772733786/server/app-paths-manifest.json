@@ -1,0 +1,9 @@
+{
+  "/page": "app/page.js",
+  "/fichar/page": "app/fichar/page.js",
+  "/test/page": "app/test/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/fichajes/page": "app/dashboard/fichajes/page.js",
+  "/dashboard/gift-cards/page": "app/dashboard/gift-cards/page.js",
+  "/dashboard/gift-cards/lookup/page": "app/dashboard/gift-cards/lookup/page.js"
+}

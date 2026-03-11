@@ -1,0 +1,56 @@
+{
+  "pages": {
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_globals_css.css",
+      "static/chunks/app/layout.js"
+    ],
+    "/dashboard/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_dashboard_page_module_css.css",
+      "static/chunks/app/dashboard/page.js"
+    ],
+    "/dashboard/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/layout.js"
+    ],
+    "/dashboard/fichajes/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app__styles_ops_module_css.css",
+      "static/chunks/app/dashboard/fichajes/page.js"
+    ],
+    "/dashboard/gift-cards/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app__styles_ops_module_css.css",
+      "static/chunks/app/dashboard/gift-cards/page.js"
+    ],
+    "/dashboard/gift-cards/lookup/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app__styles_ops_module_css.css",
+      "static/chunks/app/dashboard/gift-cards/lookup/page.js"
+    ],
+    "/fichar/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_fichar_page_module_css.css",
+      "static/chunks/app/fichar/page.js"
+    ],
+    "/test/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app__styles_ops_module_css.css",
+      "static/chunks/app/test/page.js"
+    ]
+  }
+}

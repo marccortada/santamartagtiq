@@ -99,7 +99,13 @@ export function AppShell({ children }: { children: ReactNode }) {
     router.refresh();
   }
 
-  if (pathname.startsWith('/login') || pathname.startsWith('/unauthorized')) {
+  // Pantallas sin sidebar: login, errores, y terminales tablet (fichaje / kiosk)
+  if (
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/unauthorized') ||
+    pathname.startsWith('/kiosk') ||
+    pathname === '/fichar'
+  ) {
     return <>{children}</>;
   }
 

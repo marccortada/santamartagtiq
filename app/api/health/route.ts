@@ -8,21 +8,35 @@ import { createSupabaseServerClient } from '@/lib/supabaseServer';
  */
 export async function GET() {
   const hasUrl = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL?.trim());
-  const hasServiceKey = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY?.trim());
+  const hasAnon = Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim());
+  const hasService = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY?.trim());
+  const hasOverride = Boolean(process.env.SUPABASE_SERVER_KEY?.trim());
 
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ?? '';
+  const key =
+    process.env.SUPABASE_SERVER_KEY?.trim() ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
+    '';
   const keyType = key.startsWith('eyJ') ? 'jwt' : key.startsWith('sb_secret_') ? 'secret' : 'unknown';
+  const keySource = hasOverride
+    ? 'SUPABASE_SERVER_KEY'
+    : process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
+      ? 'NEXT_PUBLIC_SUPABASE_ANON_KEY'
+      : process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
+        ? 'SUPABASE_SERVICE_ROLE_KEY'
+        : 'ninguna';
 
-  if (!hasUrl || !hasServiceKey) {
+  if (!hasUrl || !key) {
     return NextResponse.json(
       {
         ok: false,
         error: 'Faltan variables de entorno',
         env: {
           NEXT_PUBLIC_SUPABASE_URL: hasUrl ? 'ok' : 'falta',
-          SUPABASE_SERVICE_ROLE_KEY: hasServiceKey ? 'ok' : 'falta',
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: hasAnon ? 'ok' : 'falta',
+          SUPABASE_SERVICE_ROLE_KEY: hasService ? 'ok' : 'falta',
         },
-        debug: { keyLength: key.length, keyType },
+        debug: { keyLength: key.length, keyType, keySource },
       },
       { status: 503 },
     );
@@ -45,7 +59,7 @@ export async function GET() {
       );
     }
 
-    return NextResponse.json({ ok: true, env: 'ok', supabase: 'ok', debug: { keyType } });
+    return NextResponse.json({ ok: true, env: 'ok', supabase: 'ok', debug: { keyType, keySource } });
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     console.error('[api/health] Exception:', message);
